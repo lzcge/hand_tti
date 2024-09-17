@@ -31,5 +31,15 @@ V1.0.0
 |	|	|	|--IMPROVED
 |	|	|		- xxxxxxxxx
 |	|	|	
-        
+|	|	|--V1.1.1 - 2024.9.17
+|	|	|	|--NEW   
+|	|	|		- 下行pdch11时频资源
+|	|	|	|--CHANGED
+|	|	|		- 更新切换统计，区分波束切换和星间切换
+|	|	|	|--FIXED
+|	|	|		- xxxxxxxxxxx
+|	|	|	|--UNRESOLVED
+|	|	|		- xxxxxxxxx
+|	|	|	|--IMPROVED
+|	|	|		- 切换统计开始关键词由 RRC_L1A_HO_CONFIG_REQ，改进为'Send ConnReConfig Complete For Handover' 解决星间切换时，切换统计位置不准确情况      
 ```

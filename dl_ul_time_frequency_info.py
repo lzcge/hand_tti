@@ -112,8 +112,10 @@ def ps_data_deal(ps_files: list):
         print(ps_file_path)
         # 获取该文件中所有符合所有匹配规则的行，做一次初筛，将不需要的以及异常的行数据踢除，减少对异常日志的异常处理，以及提升后续逻辑查找处理的速度
         ps_keywords_contents = file_operation.get_file_keywords_lines(ps_file_path, SearchKeyword.get_ps_search_keywords())
-        # 一开始卫星ID，默认为-1
+        # 当前卫星号，一开始卫星ID，默认为-1
         satellite = -1
+        # 上一次记录的卫星号，用于记录标识星间切换
+        last_satellite = -1
         # 波束切换计数器
         handover_number = 0
         lines_length = len(ps_keywords_contents)
@@ -126,6 +128,7 @@ def ps_data_deal(ps_files: list):
         for i,line in enumerate(ps_keywords_contents):
             # 判断并提取卫星ID
             if SearchKeyword.SATELLITE.value in line:
+                last_satellite = satellite
                 satellite = PatternExtract.satellite_pattern_search(line)
 
             # mib list查找
@@ -155,14 +158,19 @@ def ps_data_deal(ps_files: list):
             elif SearchKeyword.HANDOVER_START.value in line:
                 handover_number = handover_number + 1
                 # 出现波束切换开始标志时，一开始默认该切换失败
-                infoclass_handover = PatternExtract.handover_faile_pattern_search(handover_number)
+                handover_type = '波束切换'
+                if last_satellite == satellite:
+                    pass
+                else:
+                    handover_type = '星间切换'
+                infoclass_handover = PatternExtract.handover_faile_pattern_search(handover_number,handover_type)
                 infoclass_handover.satellite = satellite
                 k = i + 1
                 # 往后查找，如果在下一个波束切换开始前找到波束切换成功标志，则更新该波束切换为成功
                 while k < lines_length and SearchKeyword.HANDOVER_START.value not in ps_keywords_contents[k]:
                     next_line_handover = ps_keywords_contents[k]
                     if SearchKeyword.HANDOVER_SUCCESS.value in next_line_handover and "for Rb_Id(1)" in next_line_handover:
-                        infoclass_handover_success = PatternExtract.handover_success_pattern_search(handover_number)
+                        infoclass_handover_success = PatternExtract.handover_success_pattern_search(handover_number,handover_type)
                         infoclass_handover.ul_dl_type = infoclass_handover_success.ul_dl_type
                         infoclass_handover.burst_type = infoclass_handover_success.burst_type
                         break
@@ -176,7 +184,7 @@ def ps_data_deal(ps_files: list):
 
 
 if __name__ == '__main__':
-    ps_file_paths = file_operation.find_ps_files_list(r"C:\Users\lzc\Desktop\龙兴\20240907库尔勒_0102星_5703圈_移动通信_东芯手持终端\20240907库尔勒_0102星_5703圈_移动通信_东芯手持终端")
+    ps_file_paths = file_operation.find_ps_files_list(r"C:\Users\lzc\Desktop\龙兴\20240910库尔勒_0102星_5743圈_移动通信_东芯手持终端-脚本统计星间切换问题\20240910库尔勒_0102星_5743圈_移动通信_东芯手持终端\ue37\20240910_173116317")
 
     ps_info_result_list = ps_data_deal(ps_file_paths)
     for ps_info_result_itm in ps_info_result_list:

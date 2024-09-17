@@ -31,7 +31,8 @@ class SearchKeyword(Enum):
     UL_SCHEDULE_BAND = 'set UL schedule[1]: band'
 
     # 波速切换提取关键字
-    HANDOVER_START = 'RRC_L1A_HO_CONFIG_REQ'
+    # HANDOVER_START = 'RRC_L1A_HO_CONFIG_REQ'
+    HANDOVER_START = 'Send ConnReConfig Complete For Handover'
     HANDOVER_SUCCESS = '[RLC] ACK'
 
     # 导航电文关键词

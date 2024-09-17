@@ -255,7 +255,7 @@ class PatternExtract:
         return info_calss
 
     @staticmethod
-    def handover_success_pattern_search(handover_number: int) -> InfoClass:
+    def handover_success_pattern_search(handover_number: int,handover_type: str) -> InfoClass:
         '''
         波束切换成功，信息提取
         :param handover_number:
@@ -263,11 +263,11 @@ class PatternExtract:
         '''
         info_calss = InfoClass()
         info_calss.ul_dl_type = '第'+str(handover_number)+'次切换成功'
-        info_calss.burst_type = '切换'
+        info_calss.burst_type = handover_type
         return info_calss
 
     @staticmethod
-    def handover_faile_pattern_search(handover_number: int) -> InfoClass:
+    def handover_faile_pattern_search(handover_number: int,handover_type: str) -> InfoClass:
         '''
         波束切换失败，信息提取
         :param handover_number:
@@ -275,7 +275,7 @@ class PatternExtract:
         '''
         info_calss = InfoClass()
         info_calss.ul_dl_type = '第'+str(handover_number)+'次切换失败'
-        info_calss.burst_type = '切换'
+        info_calss.burst_type = handover_type
         return info_calss
 
     @staticmethod
